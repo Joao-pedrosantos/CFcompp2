@@ -5,5 +5,6 @@ def sortear():
     qtd = randint(10, 31)
     for i in range(qtd):
         enviar.append(choice(comandos))
+        print(enviar[i])
     return enviar
 print(sortear())
