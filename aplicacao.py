@@ -13,6 +13,7 @@
 from enlace import *
 import time
 import numpy as np
+from sorteador import *
 
 # voce deverá descomentar e configurar a porta com através da qual ira fazer comunicaçao
 #   para saber a sua porta, execute no terminal :
@@ -45,7 +46,7 @@ def main():
         #nome de txBuffer. Esla sempre irá armazenar os dados a serem enviados.
         
         #txBuffer = imagem em bytes!
-        txBuffer = b'\x12\x13\xAA'  #isso é um array de bytes
+        txBuffer = sortear()  #isso é um array de bytes
        
         print("meu array de bytes tem tamanho {}" .format(len(txBuffer)))
         #faça aqui uma conferência do tamanho do seu txBuffer, ou seja, quantos bytes serão enviados.
@@ -56,7 +57,7 @@ def main():
         #tente entender como o método send funciona!
         #Cuidado! Apenas trasmita arrays de bytes!
                
-        
+        com1.sendData(bytes[143])
         com1.sendData(np.asarray(txBuffer))  #as array apenas como boa pratica para casos de ter uma outra forma de dados
           
         # A camada enlace possui uma camada inferior, TX possui um método para conhecermos o status da transmissão
