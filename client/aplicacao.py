@@ -47,7 +47,7 @@ def main():
         #nome de txBuffer. Esla sempre irá armazenar os dados a serem enviados.
         
         #txBuffer = imagem em bytes!
-        txBuffer = sortear()  #isso é um array de bytes
+        tamanho, txBuffer = sortear()  #isso é um array de bytes
        
         print("meu array de bytes tem tamanho {}" .format(len(txBuffer)))
         #faça aqui uma conferência do tamanho do seu txBuffer, ou seja, quantos bytes serão enviados.
@@ -60,7 +60,9 @@ def main():
         comeco = b'\x0a'
 
         com1.sendData(np.asarray(comeco))
-        com1.sendData(np.asarray(txBuffer))  #as array apenas como boa pratica para casos de ter uma outra forma de dados
+        for i in range(len(txBuffer)):
+            com1.sendData(np.asarray(tamanho[i]))
+            com1.sendData(np.asarray(txBuffer[i]))  #as array apenas como boa pratica para casos de ter uma outra forma de dados
           
         # A camada enlace possui uma camada inferior, TX possui um método para conhecermos o status da transmissão
         # O método não deve estar fincionando quando usado como abaixo. deve estar retornando zero. Tente entender como esse método funciona e faça-o funcionar.
@@ -81,8 +83,9 @@ def main():
             print('inicio da transmissão')
             print("recebeu {} bytes" .format(len(rxBuffer)))
         
-        for i in range(len(rxBuffer)):
-            print("recebeu {}" .format(rxBuffer[i]))
+            for i in range(len(rxBuffer)):
+                
+                print("recebeu {}" .format(rxBuffer[i]))
         
 
             
