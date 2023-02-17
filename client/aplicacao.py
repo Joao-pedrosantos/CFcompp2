@@ -25,7 +25,7 @@ from sorteador import *
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 serialName = "COM11"                  # Windows(variacao de)
-
+comandos_recebidos = []
 
 def main():
     try:
@@ -81,6 +81,10 @@ def main():
         rxBuffer, nRx = com1.getData(txLen)
         if comeco in com1.getData(txLen):
             print('inicio da transmissão')
+            numero = com1.getData(1)
+            info = com1.getData(numero)
+            comandos_recebidos.append(info)
+
             print("recebeu {} bytes" .format(len(rxBuffer)))
         
             for i in range(len(rxBuffer)):
