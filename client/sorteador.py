@@ -13,7 +13,10 @@ def sortear():
 
         txbuffer.append(escolha)
         txbuffer[i].upper()
-        print(f'Comando {i+1}: {txbuffer[i]} ou {txbuffer[i].hex().upper()} // Tamanho: {tamanho[i]} ')
+
+        tamn = int.from_bytes(tamanho[i], byteorder='big')
+        
+        print(f'Comando {i+1}: {txbuffer[i]} ou {txbuffer[i].hex().upper()} // Tamanho: {tamn} ')
     return tamanho, txbuffer
 
 print(sortear())
