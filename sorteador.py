@@ -11,6 +11,3 @@ def sortear():
         txbuffer[i].upper()
         print(f'Comando {i+1}: {txbuffer[i]} ou {txbuffer[i].hex().upper()}')
     return txbuffer
-
-
-print(sortear())

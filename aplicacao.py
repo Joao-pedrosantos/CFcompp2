@@ -13,6 +13,7 @@
 from enlace import *
 import time
 import numpy as np
+from random import *
 from sorteador import *
 
 # voce deverá descomentar e configurar a porta com através da qual ira fazer comunicaçao
@@ -56,8 +57,9 @@ def main():
         #faça um print para avisar que a transmissão vai começar.
         #tente entender como o método send funciona!
         #Cuidado! Apenas trasmita arrays de bytes!
-               
-        com1.sendData(bytes[143])
+        comeco = b'\x0a'
+
+        com1.sendData(np.asarray(comeco))
         com1.sendData(np.asarray(txBuffer))  #as array apenas como boa pratica para casos de ter uma outra forma de dados
           
         # A camada enlace possui uma camada inferior, TX possui um método para conhecermos o status da transmissão
@@ -75,7 +77,9 @@ def main():
         #acesso aos bytes recebidos
         txLen = len(txBuffer)
         rxBuffer, nRx = com1.getData(txLen)
-        print("recebeu {} bytes" .format(len(rxBuffer)))
+        if comeco in com1.getData(txLen):
+            print('inicio da transmissão')
+            print("recebeu {} bytes" .format(len(rxBuffer)))
         
         for i in range(len(rxBuffer)):
             print("recebeu {}" .format(rxBuffer[i]))
