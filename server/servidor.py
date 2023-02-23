@@ -5,7 +5,7 @@ from random import *
 comandos_recebidos = []
 comeco = b'\x0a'
 fim = b'\x0f'
-serialName = "COM11"
+serialName = "COM6"
 
 def main():
     try:
@@ -15,11 +15,12 @@ def main():
         tamanho, nRx = com1.getData(1)
         com1.rx.clearBuffer()
         time.sleep(.1)
-        rxLen = len(rxBuffer)
+        print("ebaaaaaa")
+        tamanho, nRx = com1.getData(1)
         tamanhoint = int.from_bytes(tamanho, byteorder='big')
         rxBuffer, nRx = com1.getData(tamanhoint)
         i = True
-
+        print("ebaaa2")
         if comeco == rxBuffer:
             while i:
                 print('inicio da transmissão')
