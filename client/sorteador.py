@@ -1,6 +1,5 @@
 from random import *
 
-
 def sortear():
     comandos = ['00 00 00 00', '00 00 AA 00', 'AA 00 00', '00 AA 00', '00 00 AA', '00 AA', 'AA 00', '00', 'FF']
     txbuffer = []

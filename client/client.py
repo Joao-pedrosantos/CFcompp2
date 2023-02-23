@@ -26,6 +26,8 @@ from sorteador import *
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 serialName = "COM11"                  # Windows(variacao de)
 comandos_recebidos = []
+comeco = b'\x0a'
+fim = b'\x0f'
 
 def main():
     try:
@@ -37,11 +39,12 @@ def main():
     
         # Ativa comunicacao. Inicia os threads e a comunicação seiral 
         com1.enable()
+        time.sleep(.2)
+        com1.sendData(b'00')
+        time.sleep(1)   
         #Se chegamos até aqui, a comunicação foi aberta com sucesso. Faça um print para informar.
-        print("Abriu a comunicação")
+        print("Abriu a comunicação e enviou byte de sacrificio")
         
-           
-                  
         #aqui você deverá gerar os dados a serem transmitidos. 
         #seus dados a serem transmitidos são um array bytes a serem transmitidos. Gere esta lista com o 
         #nome de txBuffer. Esla sempre irá armazenar os dados a serem enviados.
@@ -51,19 +54,18 @@ def main():
        
         print("meu array de bytes tem tamanho {}" .format(len(txBuffer)))
         #faça aqui uma conferência do tamanho do seu txBuffer, ou seja, quantos bytes serão enviados.
-       
-            
+        
         #finalmente vamos transmitir os todos. Para isso usamos a funçao sendData que é um método da camada enlace.
         #faça um print para avisar que a transmissão vai começar.
         #tente entender como o método send funciona!
         #Cuidado! Apenas trasmita arrays de bytes!
-        comeco = b'\x0a'
-
+        
         com1.sendData(np.asarray(comeco))
         for i in range(len(txBuffer)):
             com1.sendData(np.asarray(tamanho[i]))
+            com1.sleep(0.1)
             com1.sendData(np.asarray(txBuffer[i]))  #as array apenas como boa pratica para casos de ter uma outra forma de dados
-          
+        com1.sendData(np.asarray(fim))
         # A camada enlace possui uma camada inferior, TX possui um método para conhecermos o status da transmissão
         # O método não deve estar fincionando quando usado como abaixo. deve estar retornando zero. Tente entender como esse método funciona e faça-o funcionar.
         txSize = com1.tx.getStatus()
@@ -77,23 +79,9 @@ def main():
         #Veja o que faz a funcao do enlaceRX  getBufferLen
       
         #acesso aos bytes recebidos
-        txLen = len(txBuffer)
-        rxBuffer, nRx = com1.getData(txLen)
-        if comeco in com1.getData(txLen):
-            print('inicio da transmissão')
-            numero = com1.getData(1)
-            info = com1.getData(numero)
-            comandos_recebidos.append(info)
+        rxBuffer, nRx = com1.getData(1)
+        print("recebeu {}, quer dizer que acabou a transmissão" .format(rxBuffer))
 
-            print("recebeu {} bytes" .format(len(rxBuffer)))
-        
-            for i in range(len(rxBuffer)):
-                
-                print("recebeu {}" .format(rxBuffer[i]))
-        
-
-            
-    
         # Encerra comunicação
         print("-------------------------")
         print("Comunicação encerrada")
