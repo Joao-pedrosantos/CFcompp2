@@ -24,7 +24,7 @@ from sorteador import *
 #use uma das 3 opcoes para atribuir à variável a porta usada
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-serialName = "COM11"                  # Windows(variacao de)
+serialName = "COM4"                  # Windows(variacao de)
 comandos_recebidos = []
 comeco = b'\x0a'
 fim = b'\x0f'
@@ -63,7 +63,7 @@ def main():
         com1.sendData(np.asarray(comeco))
         for i in range(len(txBuffer)):
             com1.sendData(np.asarray(tamanho[i]))
-            com1.sleep(0.1)
+            time.sleep(0.1)
             com1.sendData(np.asarray(txBuffer[i]))  #as array apenas como boa pratica para casos de ter uma outra forma de dados
         com1.sendData(np.asarray(fim))
         # A camada enlace possui uma camada inferior, TX possui um método para conhecermos o status da transmissão
