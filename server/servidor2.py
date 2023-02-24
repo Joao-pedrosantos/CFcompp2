@@ -5,7 +5,8 @@ from random import *
 comandos_recebidos = []
 comeco = b'\x0a'
 fim = b'\x0f'
-serialName = "COM7"
+serialName = "COM8"
+vivo = b'\xf0'
 teste = []
 def main():
     try:
@@ -17,21 +18,30 @@ def main():
         time.sleep(.1)
         print(bsacr[0])
         print("byte de sacrificio recebido")
-
+        qt = -1
+        check = 0
         recebendo = True
         while recebendo:
             numero, lixo = com1.getData(1)
-            print(numero)
             numeroint = int.from_bytes(numero, byteorder='big')
-            teste.append(numeroint)
-            info = com1.getData(numeroint)
-            if info == fim:
+            com1.sendData(np.asarray(vivo))
+            if numero == fim:
+                print('achei o fim')
+                recebi = len(comandos_recebidos).to_bytes(1, byteorder='big')
                 com1.sendData(np.asarray(fim))
-                print("terminou")
-                recebendo = False
+                time.sleep(.1)
+                com1.sendData(np.asarray(recebi))
+                #recebendo = False
                 break
+
+            qt += 1
+            print(f'numero de comandos ate agora {qt}')
+            #teste.append(numeroint)
+            info, lixo = com1.getData(numeroint)
             comandos_recebidos.append(info)
-        print(len(comandos_recebidos))            
+            print(f'recebeu a seguinte informacao {info}')
+            comandos_recebidos.append(info)
+
 
     except Exception as erro:
         print("ops! :-\\")
