@@ -15,24 +15,36 @@ def main():
         tamanho, nRx = com1.getData(1)
         com1.rx.clearBuffer()
         time.sleep(.1)
-        print("ebaaaaaa")
-        tamanho, nRx = com1.getData(1)
-        tamanhoint = int.from_bytes(tamanho, byteorder='big')
-        rxBuffer, nRx = com1.getData(tamanhoint)
-        i = True
-        print("ebaaa2")
-        if comeco == rxBuffer:
-            while i:
-                print('inicio da transmissão')
+        print("byte de sacrificio recebido")
+
+        i =0
+        recebendo = True
+        print('inicio da transmissão')
+        while recebendo:
+            if i == 0:
+                print("esperando o começo")
+                com1.rx.clearBuffer()
+                com1.sendData(np.asarray(comeco))
+                com1.rx.clearBuffer()
+                time.sleep(.1)
+                print("começou")
+            else:
+                print(f'loop {i}')
                 numero = com1.getData(1)
-                info = com1.getData(numero)
-                comandos_recebidos.append(info)
-                print("recebeu {} bytes" .format(len(rxBuffer)))    
-                print("recebeu {}" .format(rxBuffer[i]))
+                
+                numeroint = int.from_bytes(numero[0], byteorder='big')
+                print(numero)
+                rxBuffer, nRx = com1.getData(numeroint)
+
+                info = com1.getData(numeroint)
+                #print(f'aqui tem o suposto comando {nRx}')
+                #print("recebeu {} bytes" .format(len(rxBuffer)))    
+                #print("recebeu {}" .format(rxBuffer))
 
                 if info == fim:
                     com1.sendData(np.asarray(fim))
-                    i = False  
+                    break
+            i += 1
     
     except Exception as erro:
         print("ops! :-\\")
